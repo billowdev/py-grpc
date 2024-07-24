@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+	// Unary
+	rpc SayHello (HelloRequest) returns (HelloReply);
+
+	// Server Streaming
+	// Server-Side Streaming
+	// In server-side streaming, the client sends a single request to the server, and the server sends a stream of responses back to the client. This can be useful for scenarios where the server needs to send multiple pieces of data in response to a single request.
+	rpc ParrotSaysHello (HelloRequest) returns (stream HelloReply);
+	
+	// Client Streaming
+	// In client-side streaming, the client sends a stream of requests to the server, and the server sends back a single response once it has processed all the requests. This pattern is useful when the client needs to send a lot of data that needs to be processed together.
+	rpc ChattyClientSaysHello (stream HelloRequest) returns (DelayedReply);
+
+	// Both Streaming
+	rpc InteractingHello (stream HelloRequest) returns (stream HelloReply);
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+  string greeting = 2;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+message DelayedReply {
+	string message = 1;
+	repeated HelloRequest request = 2;
+}
+
+
+// Summary
+// Unary RPC: Single request and single response.
+// Server-Side Streaming: Single request from client, stream of responses from server.
+// Client-Side Streaming: Stream of requests from client, single response from server.
+// Bidirectional Streaming: Both client and server send streams of messages to each other, enabling real-time communication.
